@@ -1,0 +1,9 @@
+name: hello world
+
+target:
+  nom: '%env:NOM%'
+  prenom: '%env:PRENOM%'
+  email: '%env:EMAIL%'
+
+
+
