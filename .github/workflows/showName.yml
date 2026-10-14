@@ -6,9 +6,25 @@ on:
   pull_request:
     branches: [ "page" ]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
-  page:
+  deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Show
-        run: open helloWorld.html
+      - uses: actions/checkout@v4
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .   # folder containing your index.html
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
