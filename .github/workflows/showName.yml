@@ -5,9 +5,10 @@ on:
     branches: [ "page" ]
   pull_request:
     branches: [ "page" ]
-  workflow_dispatch:
 
 jobs:
   page:
     runs-on: ubuntu-latest
-    run: open helloWorld.html
+    steps:
+      - name: Show
+        run: open helloWorld.html
