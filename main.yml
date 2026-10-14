@@ -4,6 +4,7 @@ target:
   nom: '%env:NOM%'
   prenom: '%env:PRENOM%'
   email: '%env:EMAIL%'
+  nomComplet: '%env:NOM_PRENOM%'
 
 
 

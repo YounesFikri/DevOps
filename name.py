@@ -6,17 +6,24 @@ load_dotenv()
 
 PATTERN = re.compile(r"^%env:(\w+)%")
 
+
 def resolve(node):
+
     if isinstance(node, dict):
-        return {k:resolve(v) for k, v in node.items()}
+       return {k:resolve(v) for k, v in node.items()}
     if isinstance(node, list):
         return [resolve(v) for v in node]
+
     if isinstance(node, str):
         m = PATTERN.match(node)
         if m:
             return os.environ.get(m.group(1))
     return node
 
+with open("main.yml") as f0:
+    data0 = yaml.safe_load(f0)
+
+print(data0["target"])
 
 with open("main.yml") as f:
     data = resolve(yaml.safe_load(f))
