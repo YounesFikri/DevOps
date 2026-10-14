@@ -2,76 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [ "Dev", "Val", "Prod" ]
+    branches: [ "page" ]
   pull_request:
-    branches: [ "Dev", "Val", "Prod" ]
+    branches: [ "page" ]
   workflow_dispatch:
-    inputs:
-      nombre:
-        description: "Nombre de départ (entier)"
-        required: true
-        default: "128"
 
 jobs:
-  dev:
+  page:
     runs-on: ubuntu-latest
-    outputs:
-      resultat: ${{ steps.calcul.outputs.resultat }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: showName
-        run: git branch --show-current
-
-      - name: Dev - division par 2
-        id: calcul
-        env:
-          NOMBRE: ${{ github.event.inputs.nombre || '128' }}
-        run: |
-          if ! [[ "$NOMBRE" =~ ^[0-9]+$ ]]; then
-            echo "Erreur : '$NOMBRE' n'est pas un entier positif"; exit 1
-          fi
-          if (( NOMBRE % 2 != 0 )); then
-            echo "Le nombre $NOMBRE est impair : arrêt de la pipeline"; exit 1
-          fi
-          R=$(( NOMBRE / 2 ))
-          echo "Dev : $NOMBRE / 2 = $R"
-          if (( R % 2 != 0 )); then
-            echo "Le résultat $R est impair : arrêt de la pipeline"; exit 1
-          fi
-          echo "resultat=$R" >> "$GITHUB_OUTPUT"
-
-  val:
-    needs: dev
-    runs-on: ubuntu-latest
-    outputs:
-      resultat: ${{ steps.calcul.outputs.resultat }}
-    steps:
-      - name: Val - division par 4
-        id: calcul
-        env:
-          NOMBRE: ${{ needs.dev.outputs.resultat }}
-        run: |
-          if (( NOMBRE % 4 != 0 )); then
-            echo "$NOMBRE n'est pas divisible par 4 : arrêt de la pipeline"; exit 1
-          fi
-          R=$(( NOMBRE / 4 ))
-          echo "Val : $NOMBRE / 4 = $R"
-          if (( R % 2 != 0 )); then
-            echo "Le résultat $R est impair : arrêt de la pipeline"; exit 1
-          fi
-          echo "resultat=$R" >> "$GITHUB_OUTPUT"
-
-  prod:
-    needs: val
-    runs-on: ubuntu-latest
-    steps:
-      - name: Prod - division par 8
-        env:
-          NOMBRE: ${{ needs.val.outputs.resultat }}
-        run: |
-          if (( NOMBRE % 8 != 0 )); then
-            echo "$NOMBRE n'est pas divisible par 8 : arrêt de la pipeline"; exit 1
-          fi
-          R=$(( NOMBRE / 8 ))
-          echo "Prod : $NOMBRE / 8 = $R"
+    run: open helloWorld.html
